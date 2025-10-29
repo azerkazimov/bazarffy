@@ -1,8 +1,8 @@
-import "./App.css"
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Routes } from "./routes/router";
 import { useEffect } from "react";
 import useAuthStore from "./store/auth.store";
+import Loading from "./components/ui/loading";
 
 export default function App() {
   const router = createBrowserRouter(Routes);
@@ -14,9 +14,7 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="loading-container">
-        <div className="loading-spinner">Loading...</div>
-      </div>
+      <Loading />
     );
   }
 
