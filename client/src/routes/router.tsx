@@ -13,6 +13,8 @@ import About from "@/pages/about/about";
 import Blog from "@/pages/blog/blog";
 import Features from "@/pages/features/fetures";
 import Contacts from "@/pages/contacts/contacts";
+import ProductsManager from "@/pages/admin/products-manager";
+import { Navigate } from "react-router-dom";
 
 export const Routes = [
   {
@@ -49,7 +51,7 @@ export const Routes = [
       },
     ],
   },
-  
+
   {
     path: "/auth",
     element: <AuthLayout />,
@@ -72,7 +74,10 @@ export const Routes = [
       </ProtectedRoute>
     ),
   },
-
+  {
+    path: "/admin",
+    element: <Navigate to="/admin/dashboard" />,
+  },
   {
     path: "/admin/dashboard",
     element: (
@@ -86,6 +91,14 @@ export const Routes = [
     element: (
       <ProtectedRoute requiredRoles={["admin", "super_admin"]}>
         <UserManager />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/products",
+    element: (
+      <ProtectedRoute requiredRoles={["admin", "super_admin"]}>
+        <ProductsManager />
       </ProtectedRoute>
     ),
   },

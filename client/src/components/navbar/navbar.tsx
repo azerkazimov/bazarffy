@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import useAuthStore from "@/store/auth.store";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User2 } from "lucide-react";
 import {
   DropdownMenu,
@@ -14,6 +14,16 @@ export default function Navbar() {
   const { isAuthenticated, user, logout } = useAuthStore();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -29,7 +39,9 @@ export default function Navbar() {
   const isAdmin = user?.role === "admin" || user?.role === "super_admin";
 
   return (
-    <nav className="fixed w-full top-0 z-50">
+    <nav className={`fixed w-full top-0 z-50 transition-all duration-300 ${
+      isScrolled ? "backdrop-blur-md bg-white/80 shadow-lg" : "bg-white"
+    }`}>
       <div className="container mx-auto">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -68,11 +80,11 @@ export default function Navbar() {
                 <DropdownMenuContent className="w-56" align="start">
                   <DropdownMenuLabel>
                     <div className="ml-4 flex items-center gap-3">
-                      <div className="flex items-center gap-2 px-3 py-2 bg-black/5 rounded-lg border border-black/10">
-                        <div className="w-8 h-8 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">
+                      <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 border border-gray-200">
+                        <div className="w-8 h-8 bg-linear-to-br from-gray-700 to-gray-900 flex items-center justify-center text-sm font-bold text-white">
                           {user?.username?.charAt(0).toUpperCase()}
                         </div>
-                        <span className="text-sm font-medium text-black/90">
+                        <span className="text-sm font-medium text-gray-900">
                           {user?.username}
                         </span>
                       </div>
@@ -101,7 +113,7 @@ export default function Navbar() {
 
                     <button
                       onClick={logout}
-                      className="px-4 py-2 bg-red-600/20 text-red-400 border border-red-500/30 rounded-lg font-medium hover:bg-red-600/30 hover:border-red-500/50 transition-all duration-200"
+                      className="px-4 py-2 bg-red-600 text-white border border-red-700 font-medium hover:bg-red-700 transition-all duration-200"
                     >
                       Logout
                     </button>
@@ -180,17 +192,17 @@ export default function Navbar() {
                       Admin
                     </Link>
                   )}
-                  <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10 mt-2">
-                    <div className="w-8 h-8 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm font-bold text-white">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 border border-gray-200 mt-2">
+                    <div className="w-8 h-8 bg-linear-to-br from-gray-700 to-gray-900 flex items-center justify-center text-sm font-bold text-white">
                       {user?.username?.charAt(0).toUpperCase()}
                     </div>
-                    <span className="text-sm font-medium text-white/90">
+                    <span className="text-sm font-medium text-gray-900">
                       {user?.username}
                     </span>
                   </div>
                   <button
                     onClick={logout}
-                    className="px-4 py-2 bg-red-600/20 text-red-400 border border-red-500/30 rounded-lg font-medium hover:bg-red-600/30 transition-colors text-left"
+                    className="px-4 py-2 bg-red-600 text-white border border-red-700 font-medium hover:bg-red-700 transition-colors text-left"
                   >
                     Logout
                   </button>
@@ -205,7 +217,7 @@ export default function Navbar() {
                   </Link>
                   <Link
                     to="/auth/register"
-                    className="px-4 py-2 bg-linear-to-br from-indigo-600 to-purple-600 text-white rounded-lg font-medium hover:from-indigo-500 hover:to-purple-500 transition-all text-center"
+                    className="px-4 py-2 bg-gray-900 text-white font-medium hover:bg-gray-700 transition-all text-center"
                   >
                     Sign Up
                   </Link>

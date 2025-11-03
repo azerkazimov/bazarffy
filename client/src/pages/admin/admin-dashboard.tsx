@@ -4,6 +4,7 @@ import useAuthStore from '../../store/auth.store';
 import { isAdmin, isSuperAdmin, getRoleNames } from '../../utils/auth.utils';
 import { userAPI } from '../../service/api.auth';
 import type { User } from '../../types/user.types';
+import { Users, Package, BarChart3, Check, ShieldCheck } from 'lucide-react';
 
 export default function AdminDashboard() {
   const { user } = useAuthStore();
@@ -30,27 +31,25 @@ export default function AdminDashboard() {
 
   if (!user || !isAdmin(user)) {
     return (
-      <div className="container py-8">
-        <div className="bg-red-500/10 border-2 border-red-500/30 rounded-2xl p-8 text-center backdrop-blur-sm">
-          <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg width="32" height="32" fill="currentColor" className="text-red-400" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clipRule="evenodd" />
-            </svg>
+      <div className="container py-8 px-8 bg-white min-h-screen">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-8 text-center">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <ShieldCheck className="w-8 h-8 text-red-500" />
           </div>
-          <h2 className="text-2xl font-bold text-red-400 mb-2">Access Denied</h2>
-          <p className="text-white/80">Administrator privileges required.</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
+          <p className="text-gray-600">Administrator privileges required.</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container py-8">
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-indigo-500 to-indigo-700 bg-clip-text text-transparent">
+    <div className="container py-8 px-8 bg-white min-h-screen">
+      <div className="mb-8 mt-16">
+        <h1 className="text-5xl md:text-6xl font-serif font-light text-gray-900 mb-2">
           Admin Dashboard
         </h1>
-        <p className="text-base opacity-70 mt-2">
+        <p className="text-base text-gray-600 mt-2">
           Welcome, {user.username}! Your role: {getRoleNames(user.role)}
         </p>
       </div>
@@ -58,26 +57,24 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {/* User Management - Super Admin Only */}
         {isSuperAdmin(user) && (
-          <div className="bg-white/5 backdrop-blur-md rounded-xl border border-white/10 overflow-hidden transition-all hover:-translate-y-1 hover:shadow-2xl hover:border-white/20">
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden transition-all hover:-translate-y-1 hover:shadow-lg">
             <div className="p-6">
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-2xl">
-                  <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                  </svg>
+                <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
+                  <Users className="w-6 h-6 text-purple-600" />
                 </div>
                 <div>
-                  <div className="text-sm opacity-70 mb-1">
+                  <div className="text-sm text-gray-600 mb-1">
                     User Management
                   </div>
-                  <div className="text-xl font-semibold">
+                  <div className="text-xl font-semibold text-gray-900">
                     Manage user roles
                   </div>
                 </div>
               </div>
             </div>
-            <div className="px-6 py-4 bg-white/[0.02] border-t border-white/5">
-              <Link to="/admin/users" className="text-indigo-500 font-medium text-sm hover:text-indigo-400 transition-colors">
+            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+              <Link to="/admin/users" className="text-gray-900 font-medium text-sm hover:text-gray-700 transition-colors">
                 View all users →
               </Link>
             </div>
@@ -85,52 +82,48 @@ export default function AdminDashboard() {
         )}
 
         {/* Product Management - Admin and Super Admin */}
-        <div className="bg-white/5 backdrop-blur-md rounded-xl border border-white/10 overflow-hidden transition-all hover:-translate-y-1 hover:shadow-2xl hover:border-white/20">
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden transition-all hover:-translate-y-1 hover:shadow-lg">
           <div className="p-6">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center text-2xl">
-                <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
-                </svg>
+              <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                <Package className="w-6 h-6 text-blue-600" />
               </div>
               <div>
-                <div className="text-sm opacity-70 mb-1">
+                <div className="text-sm text-gray-600 mb-1">
                   Product Management
                 </div>
-                <div className="text-xl font-semibold">
+                <div className="text-xl font-semibold text-gray-900">
                   Manage products
                 </div>
               </div>
             </div>
           </div>
-          <div className="px-6 py-4 bg-white/[0.02] border-t border-white/5">
-            <Link to="/products" className="text-indigo-500 font-medium text-sm hover:text-indigo-400 transition-colors">
+          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+            <Link to="/admin/products" className="text-gray-900 font-medium text-sm hover:text-gray-700 transition-colors">
               View products →
             </Link>
           </div>
         </div>
 
         {/* System Stats */}
-        <div className="bg-white/5 backdrop-blur-md rounded-xl border border-white/10 overflow-hidden transition-all hover:-translate-y-1 hover:shadow-2xl hover:border-white/20">
+        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden transition-all hover:-translate-y-1 hover:shadow-lg">
           <div className="p-6">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center text-2xl">
-                <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-                </svg>
+              <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-green-600" />
               </div>
               <div>
-                <div className="text-sm opacity-70 mb-1">
+                <div className="text-sm text-gray-600 mb-1">
                   System Statistics
                 </div>
-                <div className="text-xl font-semibold">
+                <div className="text-xl font-semibold text-gray-900">
                   View analytics
                 </div>
               </div>
             </div>
           </div>
-          <div className="px-6 py-4 bg-white/[0.02] border-t border-white/5">
-            <span className="text-indigo-500 font-medium text-sm opacity-60 cursor-default">
+          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
+            <span className="text-gray-500 font-medium text-sm cursor-default">
               Coming soon
             </span>
           </div>
@@ -138,29 +131,29 @@ export default function AdminDashboard() {
       </div>
 
       {/* Role Information */}
-      <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-6 mt-8">
-        <h3 className="text-indigo-400 text-xl font-semibold mb-4">Your Permissions</h3>
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
+        <h3 className="text-gray-900 text-xl font-semibold mb-4">Your Permissions</h3>
         <ul className="space-y-2">
-          <li className="text-base opacity-90 flex items-center gap-2">
-            <span className="text-green-500 font-bold">✓</span>
+          <li className="text-base text-gray-700 flex items-center gap-2">
+            <Check className="w-5 h-5 text-green-600" />
             Access admin dashboard
           </li>
-          <li className="text-base opacity-90 flex items-center gap-2">
-            <span className="text-green-500 font-bold">✓</span>
+          <li className="text-base text-gray-700 flex items-center gap-2">
+            <Check className="w-5 h-5 text-green-600" />
             Manage products
           </li>
           {isSuperAdmin(user) && (
             <>
-              <li className="text-base opacity-90 flex items-center gap-2">
-                <span className="text-green-500 font-bold">✓</span>
+              <li className="text-base text-gray-700 flex items-center gap-2">
+                <Check className="w-5 h-5 text-green-600" />
                 Manage user roles
               </li>
-              <li className="text-base opacity-90 flex items-center gap-2">
-                <span className="text-green-500 font-bold">✓</span>
+              <li className="text-base text-gray-700 flex items-center gap-2">
+                <Check className="w-5 h-5 text-green-600" />
                 View all users
               </li>
-              <li className="text-base opacity-90 flex items-center gap-2">
-                <span className="text-green-500 font-bold">✓</span>
+              <li className="text-base text-gray-700 flex items-center gap-2">
+                <Check className="w-5 h-5 text-green-600" />
                 Promote clients to admin
               </li>
             </>
@@ -169,13 +162,13 @@ export default function AdminDashboard() {
       </div>
 
       {/* Admin Users Section */}
-      <div className="bg-white/5 backdrop-blur-md rounded-xl border border-white/10 p-6 mt-8">
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mt-8">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-2xl font-semibold">Admin Users</h3>
+          <h3 className="text-2xl font-semibold text-gray-900">Admin Users</h3>
           {isSuperAdmin(user) && (
             <Link 
               to="/admin/users" 
-              className="text-indigo-500 font-medium text-sm hover:text-indigo-400 hover:underline transition-colors"
+              className="text-gray-900 font-medium text-sm hover:text-gray-700 hover:underline transition-colors"
             >
               View all users →
             </Link>
@@ -183,7 +176,7 @@ export default function AdminDashboard() {
         </div>
         
         {loadingUsers ? (
-          <div className="p-6 text-center opacity-80">Loading users...</div>
+          <div className="p-6 text-center text-gray-600">Loading users...</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {users
@@ -191,19 +184,19 @@ export default function AdminDashboard() {
               .map((adminUser) => (
                 <div 
                   key={adminUser._id} 
-                  className="flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-lg transition-all hover:bg-white/[0.08] hover:border-white/20 hover:-translate-y-0.5 hover:shadow-lg"
+                  className="flex items-center gap-4 p-4 bg-gray-50 border border-gray-200 rounded-lg transition-all hover:bg-gray-100 hover:border-gray-300 hover:-translate-y-0.5 hover:shadow-md"
                 >
-                  <div className="w-12 h-12 min-w-[3rem] rounded-full bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-xl font-bold text-white">
+                  <div className="w-12 h-12 min-w-12 rounded-full bg-linear-to-br from-gray-700 to-gray-900 flex items-center justify-center text-xl font-bold text-white">
                     {adminUser.username.charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0 flex flex-col gap-1">
-                    <div className="font-semibold text-base truncate">{adminUser.username}</div>
-                    <div className="text-sm opacity-70 truncate">{adminUser.email}</div>
+                    <div className="font-semibold text-base text-gray-900 truncate">{adminUser.username}</div>
+                    <div className="text-sm text-gray-600 truncate">{adminUser.email}</div>
                     <span
                       className={`inline-flex items-center self-start px-3 py-1 rounded-full text-xs font-semibold capitalize ${
                         adminUser.role === 'super_admin' 
-                          ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' 
-                          : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                          ? 'bg-purple-100 text-purple-700 border border-purple-200' 
+                          : 'bg-blue-100 text-blue-700 border border-blue-200'
                       }`}
                     >
                       {getRoleNames(adminUser.role)}

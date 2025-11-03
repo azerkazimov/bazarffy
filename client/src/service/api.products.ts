@@ -33,6 +33,23 @@ const productAPI = {
     const response = await api.get(`/${id}`);
     return response.data;
   },
+  sortProducts: async (sortBy: string) => {
+    const response = await api.get(`/sort?sortBy=${sortBy}`);
+    return response.data;
+  },
+  searchProducts: async (searchQuery: string) => {
+    const response = await api.get(`/search?search=${searchQuery}`);
+    return response.data;
+  },
+  getCategoryCounts: async () => {
+    const response = await api.get('/categories/counts');
+    return response.data;
+  },
+  getProductsByCategory: async (category: string, sortBy?: string) => {
+    const url = sortBy ? `/category/${category}?sortBy=${sortBy}` : `/category/${category}`;
+    const response = await api.get(url);
+    return response.data;
+  },
 };
 
 export default productAPI;

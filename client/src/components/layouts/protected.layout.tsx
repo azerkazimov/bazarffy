@@ -29,7 +29,7 @@ export default function ProtectedRoute({ children, requiredRoles, requiredAuth =
     const hasRequiredRole = requiredRoles.includes(user?.role); 
     if(!hasRequiredRole) {
       return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+        <div>
           <Navbar />
           <div className="flex justify-center items-center min-h-[calc(100vh-4rem)] p-8">
             <div className="bg-red-500/10 border-2 border-red-500/30 rounded-2xl p-8 max-w-md backdrop-blur-sm">
@@ -52,7 +52,7 @@ export default function ProtectedRoute({ children, requiredRoles, requiredAuth =
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+    <div>
       <Navbar />
       <div className="min-h-[calc(100vh-4rem)]">
         {children}

@@ -1,8 +1,8 @@
 import { useProductStore } from "@/store/products.store";
 import { useEffect, useState, useRef } from "react";
-import ProductCard from "./product-card";
+import ProductCard from "../products/product-card";
 import { useModalStore } from "@/store/modal.store";
-import ProductForm from "./product-form";
+import ProductForm from "../products/product-form";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,12 +10,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Plus, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "@/store/auth.store";
-import { PRODUCT_CATEGORIES } from "./product-form.schema";
+import { PRODUCT_CATEGORIES } from "../products/product-form.schema";
 
-export default function Products() {
+export default function ProductsManager() {
   const { products, getProducts, searchResults, isSearching, categoryCounts, getCategoryCounts, getProductsByCategory } = useProductStore();
   const { openModal } = useModalStore();
   const { currentSort, setCurrentSort } = useProductStore();
@@ -98,7 +98,7 @@ export default function Products() {
   }
 
   const handleProductClick = (productId: string) => {
-    navigate(`/shop/${productId}`);
+    navigate(`/products/${productId}`);
     setShowSearchDropdown(false);
     clearSearch();
   }
@@ -106,13 +106,22 @@ export default function Products() {
   return (
     <div className="bg-white min-h-screen">
       <div className="container mx-auto px-4 py-8 mt-16">
-        {/* Header with Title, Sort, and Search */}
+        {/* Header Section */}
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <Package className="w-8 h-8 text-gray-900" />
+            <h1 className="text-5xl md:text-6xl font-serif font-light text-gray-900">
+              Products Manager
+            </h1>
+          </div>
+          <p className="text-gray-600 text-lg ml-11">
+            Manage your product catalog
+          </p>
+        </div>
+
+        {/* Controls: Sort and Search */}
         <div className="flex items-start justify-between mb-8 gap-6 flex-wrap">
-          <h1 className="text-5xl md:text-6xl font-serif font-light text-gray-900">
-            Shop
-          </h1>
-          
-          <div className="flex items-center gap-4 flex-1 max-w-2xl justify-end">
+          <div className="flex items-center gap-4 flex-1 max-w-2xl">
             {/* Sort Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -144,11 +153,11 @@ export default function Products() {
             <div className="relative flex-1 max-w-md" ref={searchRef}>
               <input
                 type="text"
-                placeholder="Search..."
+                placeholder="Search products..."
                 value={searchQuery} 
                 onChange={(e) => handleSearch(e)}
                 onFocus={() => searchQuery.trim() && setShowSearchDropdown(true)}
-                className="w-full px-4 py-2 border-b-2 border-gray-300  bg-transparent text-gray-700 placeholder-gray-400"
+                className="w-full px-4 py-2 border-b-2 border-gray-300 bg-transparent text-gray-700 placeholder-gray-400 focus:border-gray-900 focus:outline-none transition-colors"
               />
               <button className="absolute right-2 top-1/2 -translate-y-1/2">
                 <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="text-gray-400">
@@ -202,18 +211,27 @@ export default function Products() {
               )}
             </div>
           </div>
+
+          {/* Add Product Button */}
+          <Button 
+            className="px-6 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors shadow-md flex items-center gap-2" 
+            onClick={handleOpenModal}
+          >
+            <Plus className="w-4 h-4" />
+            Add Product
+          </Button>
         </div>
 
         {/* Category Filter Tabs */}
-        <div className="flex items-center gap-6 mb-12 overflow-x-auto pb-2">
+        <div className="flex items-center gap-6 mb-12 overflow-x-auto pb-2 border-b border-gray-200">
           {categories.map((category) => (
             <button
               key={category.name}
               onClick={() => handleCategoryChange(category.name)}
-              className={`whitespace-nowrap font-light text-lg transition-colors ${
+              className={`whitespace-nowrap font-light text-lg pb-3 transition-colors border-b-2 ${
                 selectedCategory === category.name
-                  ? "text-red-400"
-                  : "text-gray-400 hover:text-gray-600"
+                  ? "text-gray-900 border-gray-900"
+                  : "text-gray-400 hover:text-gray-600 border-transparent"
               }`}
             >
               {formatCategoryName(category.name)}
@@ -224,28 +242,32 @@ export default function Products() {
 
         {/* Products Grid */}
         {products && products.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product) => (
-              <ProductCard key={product._id} product={product} showDelete={isAdmin} />
-            ))}
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <p className="text-gray-600">
+                Showing <span className="font-semibold">{products.length}</span> products
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              {products.map((product) => (
+                <ProductCard key={product._id} product={product} showDelete={isAdmin} />
+              ))}
+            </div>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-20">
+          <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-gray-300 rounded-xl">
             <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
-              <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24" className="text-gray-400">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-              </svg>
+              <Package className="w-12 h-12 text-gray-400" />
             </div>
             <h3 className="text-xl font-semibold mb-2 text-gray-800">No products yet</h3>
-            <p className="text-gray-600 mb-6">{isAdmin ? "Get started by adding your first product" : "Check back later for products"}</p>
-            {isAdmin && (
-              <Button 
-                className="px-6 py-3 bg-gray-900 text-white font-medium rounded hover:bg-gray-800 transition-colors" 
-                onClick={handleOpenModal}
-              >
-                + Add Your First Product
-              </Button>
-            )}
+            <p className="text-gray-600 mb-6">Get started by adding your first product</p>
+            <Button 
+              className="px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2" 
+              onClick={handleOpenModal}
+            >
+              <Plus className="w-5 h-5" />
+              Add Your First Product
+            </Button>
           </div>
         )}
       </div>
